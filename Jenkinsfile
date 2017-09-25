@@ -76,9 +76,8 @@ def checkout () {
     stage 'Checkout code'
     node {
         echo 'Building.......'
-      wrap([$class: 'BuildUser']) {
-    def userId = env.BUILD_USER_ID
-  }          
+def userId = build.getCause(Cause.UserIdCause).getUserId()
+       
          notifyBuildSlack('Starting Prod Job','chatops',$userId)
         checkout([
                 $class: 'GitSCM', 
