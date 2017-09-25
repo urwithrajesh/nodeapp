@@ -83,7 +83,7 @@ def checkout () {
                 doGenerateSubmoduleConfigurations: false, 
                 extensions: [[$class: 'LocalBranch', localBranch: "**"]], 
                 submoduleCfg: [], 
-                userRemoteConfigs: [[url: 'https://github.com/urwithrajesh/docker-test']]
+                userRemoteConfigs: [[url: 'https://github.com/urwithrajesh/nodeapp']]
                 ])
         }
     }
@@ -94,7 +94,7 @@ def sonartest () {
     node {
       echo 'Testing...'
       withSonarQubeEnv('SonarQube') {
-        sh ' /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQube/bin/sonar-scanner -Dsonar.projectBaseDir=/var/lib/jenkins/workspace/docker-test'
+        sh ' /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQube/bin/sonar-scanner -Dsonar.projectBaseDir=/var/lib/jenkins/workspace/nodeapp'
           }
         }
       }
@@ -113,7 +113,7 @@ def docker() {
   node {
     echo 'Building Application'
 //Finding BRANCH NAME
-    git url: 'https://github.com/urwithrajesh/docker-test'
+    git url: 'https://github.com/urwithrajesh/nodeapp'
     sh 'git rev-parse --abbrev-ref HEAD > GIT_BRANCH'
     git_branch = readFile('GIT_BRANCH').trim()
     echo git_branch
