@@ -1,7 +1,7 @@
 #!groovy
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-
+def userId = build.getCause(Cause.UserIdCause).getUserId()
 node {
         checkout()
      //   sonartest()
@@ -14,10 +14,12 @@ node {
 def notifyBuildSlack(String buildStatus, String toChannel) 
     {
         // build status of null means successful
-        buildStatus =  buildStatus ?: 'SUCCESSFUL'
-        def summary = "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Jenkins>)"
-        def colorCode = '#FF0000'
+        def userId = build.getCause(Cause.UserIdCause).getUserId()
 
+        buildStatus =  buildStatus ?: 'SUCCESSFUL'
+            def summary = "${userId}" ${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Jenkins>)"
+        def colorCode = '#FF0000'
+            
         if (buildStatus == 'STARTED' || buildStatus == 'UNSTABLE') {
           colorCode = '#FFFF00' // YELLOW
         } else if (buildStatus == 'SUCCESSFUL') {
