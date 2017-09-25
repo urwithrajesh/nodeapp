@@ -4,7 +4,7 @@ import groovy.json.JsonSlurper
 
 node {
         checkout()
-        sonartest()
+     //   sonartest()
         junit()
         docker()
         deploy()
