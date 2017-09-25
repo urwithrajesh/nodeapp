@@ -10,14 +10,11 @@ node {
 }
 
 // ####### Slack functions #################
-def notifyBuildSlack(String buildStatus, String toChannel, String userId) 
+def notifyBuildSlack(String buildStatus, String toChannel) 
     {
         // build status of null means successful
-
-         def userId = build.getCause(Cause.UserIdCause).getUserId()
-       echo "User ID is $userId"
         buildStatus =  buildStatus ?: 'SUCCESSFUL'
-         def summary = "${userId} ${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Jenkins>)"
+         def summary = "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Jenkins>)"
         def colorCode = '#FF0000'
             
         if (buildStatus == 'STARTED' || buildStatus == 'UNSTABLE') {
@@ -78,7 +75,14 @@ def checkout () {
     stage 'Checkout code'
     node {
         echo 'Building.......'
-         notifyBuildSlack('Starting Prod Job','chatops',$userId)
+
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '<CREDENTIAL_ID>',
+                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+
+println(env.USERNAME)
+  }
+
+            notifyBuildSlack('Starting Prod Job','chatops')
         checkout([
                 $class: 'GitSCM', 
                 branches: [[name: '*/master']], 
