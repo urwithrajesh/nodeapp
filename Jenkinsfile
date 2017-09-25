@@ -77,7 +77,7 @@ def checkout () {
     node {
         echo 'Building.......'
 def userId = build.getCause(Cause.UserIdCause).getUserId()
-       
+       echo "User ID is $userId"
          notifyBuildSlack('Starting Prod Job','chatops',$userId)
         checkout([
                 $class: 'GitSCM', 
