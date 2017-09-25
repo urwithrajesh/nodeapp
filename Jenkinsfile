@@ -81,7 +81,6 @@ def checkout () {
                 $class: 'GitSCM', 
                 branches: [[name: '*/master']], 
                 doGenerateSubmoduleConfigurations: false, 
-                extensions: [[$class: 'LocalBranch', localBranch: "**"]], 
                 submoduleCfg: [], 
                 userRemoteConfigs: [[url: 'https://github.com/urwithrajesh/nodeapp']]
                 ])
