@@ -14,7 +14,9 @@ def notifyBuildSlack(String buildStatus, String toChannel, String userId)
     {
         // build status of null means successful
 
-         buildStatus =  buildStatus ?: 'SUCCESSFUL'
+         def userId = build.getCause(Cause.UserIdCause).getUserId()
+       echo "User ID is $userId"
+        buildStatus =  buildStatus ?: 'SUCCESSFUL'
          def summary = "${userId} ${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Jenkins>)"
         def colorCode = '#FF0000'
             
@@ -76,8 +78,6 @@ def checkout () {
     stage 'Checkout code'
     node {
         echo 'Building.......'
-def userId = build.getCause(Cause.UserIdCause).getUserId()
-       echo "User ID is $userId"
          notifyBuildSlack('Starting Prod Job','chatops',$userId)
         checkout([
                 $class: 'GitSCM', 
